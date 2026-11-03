@@ -2,7 +2,10 @@
 export function runtimeDatabaseUrl(value: string | undefined, serverless: boolean) {
   if (!value || !serverless) return value;
   const url = new URL(value);
-  url.searchParams.set("connection_limit", "1");
+  // Fluid Compute serves concurrent requests in one instance. A single slot
+  // serializes authentication, page queries and webhook writes behind each other.
+  // Keep this small because each additional instance owns its own pool.
+  url.searchParams.set("connection_limit", "3");
   if (!url.searchParams.has("pool_timeout")) url.searchParams.set("pool_timeout", "10");
   if (!url.searchParams.has("connect_timeout")) url.searchParams.set("connect_timeout", "10");
   if (url.hostname.endsWith(".pooler.supabase.com") && url.port === "6543") {

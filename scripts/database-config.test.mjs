@@ -9,7 +9,7 @@ test('serverless pool tuning preserves database identity, credentials, and expli
  const original=new URL(connection),updated=new URL(runtimeDatabaseUrl(connection,true));
  for(const field of ['host','username','password','pathname'])assert.equal(updated[field],original[field]);
  assert.equal(updated.searchParams.get('sslmode'),'require');
- assert.equal(updated.searchParams.get('connection_limit'),'1');
+ assert.equal(updated.searchParams.get('connection_limit'),'3');
  assert.equal(updated.searchParams.get('pool_timeout'),'17');
  assert.equal(updated.searchParams.get('pgbouncer'),'true');
  assert.equal(runtimeDatabaseUrl(connection,false),connection);
